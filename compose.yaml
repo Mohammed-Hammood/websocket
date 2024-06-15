@@ -15,18 +15,22 @@ services:
             context: .
         ports:
             - 8000:8000
+        expose:
+          - 8000
         # volumes:
           # - backend_data:/app
     nginx:
       container_name: nginx
-      restart: on-failure
+      restart: always
       build:
         context: ./nginx
         dockerfile: Dockerfile
       ports:
         - 8080:80
-      depends_on:
-        - backend
+      expose:
+        - 8080
+      # depends_on:
+        # - backend
 
 # volumes:
 #    backend_data:
