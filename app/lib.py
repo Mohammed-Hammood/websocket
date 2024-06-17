@@ -62,7 +62,7 @@ html = """
                 return `ws://${window.location.host}/chat/${chatId}`;
             }
 
-            var ws = new WebSocket(getURL());
+            const ws = new WebSocket(getURL());
             const form = document.getElementById("form");
             const input = document.getElementById("message_value");
             const clearMessageButton = document.getElementById("clearMessageButton");
