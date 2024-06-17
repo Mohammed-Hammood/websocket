@@ -17,6 +17,8 @@ services:
             - 8000:8000
         expose:
           - 8000
+        networks:
+          - fastapi_net
         # volumes:
           # - backend_data:/app
     nginx:
@@ -29,9 +31,13 @@ services:
         - 8080:80
       expose:
         - 8080
+      networks:
+        - fastapi_net
       # depends_on:
         # - backend
-
+networks:
+  fastapi_net:
+  
 # volumes:
 #    backend_data:
   

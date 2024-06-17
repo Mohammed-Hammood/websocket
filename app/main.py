@@ -1,30 +1,14 @@
-from typing import Union
+# from typing import Union
 from fastapi.responses import HTMLResponse
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from .lib import html
 
 app = FastAPI()
 
 
 @app.get("/", response_class=HTMLResponse)
 async def read_root():
-    return """
-        <html>
-            <head>
-                <title>Some HTML in here</title>
-            </head>
-            <body>
-                <h1>Look ma! HTML!</h1>
-            </body>
-        </html>
-        """
-
-@app.get("/example")
-def get_example():
-    return {'data': 'some data from example root'}
-
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Union[str, None] = None):
-    return {"item_id": item_id, "q": q}
+    return html
 
 
 class ConnectionManager:
@@ -55,14 +39,17 @@ manager = ConnectionManager()
 #         await websocket.send_text(f"Message text was: {data}")
 
 
-@app.websocket("/ws/{client_id}")
-async def websocket_endpoint(websocket: WebSocket, client_id: int):
+@app.websocket("/chat/{chat_id}")
+async def websocket_endpoint(websocket: WebSocket, chat_id: int):
     await manager.connect(websocket)
+    import json
     try:
         while True:
             data = await websocket.receive_text()
             await manager.send_personal_message(f"You wrote: {data}", websocket)
-            await manager.broadcast(f"Client #{client_id} says: {data}")
+            # msg = (f'[{chat_id}, {data}')
+            await manager.broadcast(data)
+            # await manager.broadcast(f"Client #{chat_it} says: {data}")
     except WebSocketDisconnect:
         manager.disconnect(websocket)
-        await manager.broadcast(f"Client #{client_id} left the chat")
+        await manager.broadcast(f"Client #{chat_id} left the chat")
