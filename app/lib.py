@@ -1,8 +1,10 @@
 
 html = """
-<html>
+<!DOCTYPE html>
+<html lang="en">
     <head>
         <title>WebSocket</title>
+        <link href="https://static-00.iconduck.com/assets.00/chat-icon-2048x2048-i7er18st.png" type="image/x-icon" rel="icon" />
         <style>
             body {
                 padding:1rem;
