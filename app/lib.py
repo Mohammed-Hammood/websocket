@@ -10,7 +10,7 @@ html = """
                 display:flex;
                 justify-content:center;
             }
-            .container, form {
+            .container, form, .form_section {
                 display:flex;
                 justify-content:center;
                 flex-direction:column;
@@ -18,7 +18,7 @@ html = """
                 width:100%;
                 max-width:800px;
             }
-            form {
+            .form_section {
                 flex-direction:row;
                 gap:0;
             }
@@ -43,14 +43,26 @@ html = """
                 </h1>
                 <button type="button" id="clearMessageButton">Clear messages</button>
                 <form id="form" >
-                        <input type="text" id="message_value" />
-                        <button type="submit">Send</button>
+                        <div class="form_section"><p id="endpoint"></p></div>
+                        <div class="form_section">
+                            <input type="text" id="chat_id_value" value="1" maxlength="60"/>
+                            <button type="button" onclick="reconnectWebSocket()">Reconnect</button>
+                        </div>
+                        <div class="form_section">
+                            <input type="text" id="message_value" />
+                            <button type="submit">Send</button>
+                        </div>
                 </form>
-                <div id="messages_container">
-                </div>
+                <div id="messages_container"></div>
         </div>
         <script defer>
-            const ws = new WebSocket("ws://localhost:8000/chat/1");
+            
+            function getURL(){
+                const chatId = document.getElementById("chat_id_value").value.trim().replaceAll(" ", "");
+                return `ws://${window.location.host}/chat/${chatId}`;
+            }
+
+            var ws = new WebSocket(getURL());
             const form = document.getElementById("form");
             const input = document.getElementById("message_value");
             const clearMessageButton = document.getElementById("clearMessageButton");
@@ -66,9 +78,11 @@ html = """
                     input.value = "";
                 
             });
-            clearMessageButton.addEventListener("click", function(){
+            function clearMessages(){
                 messagesContainer.innerHTML = "";
-            })
+            }
+
+            clearMessageButton.addEventListener("click", clearMessages);
 
             ws.onopen = function(e){
                 console.log("Connected");
@@ -89,6 +103,18 @@ html = """
                 
                 messagesContainer.prepend(p);
             }
+            
+            function reconnectWebSocket(){
+                const endpoint = document.getElementById("endpoint");
+                const url = getURL();
+                endpoint.innerText = url;
+                location.reload();
+
+            }
+            
+            window.addEventListener("load",  function (){
+                document.getElementById("endpoint").innerText = getURL();
+            });
 
         </script>
     </body>

@@ -40,7 +40,7 @@ manager = ConnectionManager()
 
 
 @app.websocket("/chat/{chat_id}")
-async def websocket_endpoint(websocket: WebSocket, chat_id: int):
+async def websocket_endpoint(websocket: WebSocket, chat_id: str):
     await manager.connect(websocket)
     import json
     try:
