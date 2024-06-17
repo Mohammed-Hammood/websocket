@@ -61,7 +61,7 @@ html = """
             
             function getURL(){
                 const chatId = document.getElementById("chat_id_value").value.trim().replaceAll(" ", "");
-                return `ws://${window.location.host}/chat/${chatId}`;
+                return `wss://${window.location.host}/chat/${chatId}`;
             }
 
             const ws = new WebSocket(getURL());
