@@ -17,26 +17,26 @@ services:
             - 8000:8000
         expose:
           - 8000
-        networks:
-          - fastapi_net
+        # networks:
+          # - fastapi_net
         # volumes:
           # - backend_data:/app
-    nginx:
-      container_name: nginx
-      restart: always
-      build:
-        context: ./nginx
-        dockerfile: Dockerfile
-      ports:
-        - 8080:80
-      expose:
-        - 8080
-      networks:
-        - fastapi_net
+    # nginx:
+    #   container_name: nginx
+    #   restart: always
+    #   build:
+    #     context: ./nginx
+    #     dockerfile: Dockerfile
+    #   ports:
+    #     - 8080:80
+    #   expose:
+    #     - 8080
+    #   networks:
+    #     - fastapi_net
       # depends_on:
         # - backend
-networks:
-  fastapi_net:
+# networks:
+#   fastapi_net:
   
 # volumes:
 #    backend_data:
